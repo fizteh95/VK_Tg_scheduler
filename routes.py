@@ -1,4 +1,5 @@
 from src.views import Test
 
-
-routes = [('GET', '/test', Test, 'test'),]
+routes = [
+    ("GET", "/test", Test, "test"),
+]

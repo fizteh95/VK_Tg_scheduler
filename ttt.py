@@ -1,7 +1,6 @@
 import asyncio
 
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.ext.asyncio import create_async_engine
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.future import select
 from sqlalchemy.orm import sessionmaker
 
@@ -36,9 +35,7 @@ async def async_main():
 
     # expire_on_commit=False will prevent attributes from being expired
     # after commit.
-    async_session = sessionmaker(
-        engine, expire_on_commit=False, class_=AsyncSession
-    )
+    async_session = sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
 
     async with async_session() as session:
         # await add_test_data(session)
@@ -47,9 +44,7 @@ async def async_main():
         # # expire_on_commit=False allows
         # print(a1.data)
 
-        chpok = await session.execute(
-            select(A).order_by(A.id).limit(10)
-        )
+        chpok = await session.execute(select(A).order_by(A.id).limit(10))
         result = chpok.scalars().all()
         for r in result:
             print(r.data)
@@ -58,7 +53,7 @@ async def async_main():
         # session.add(new_a)
 
         # result[1].data = 'abru'
-        #await session.commit()
+        # await session.commit()
 
     # for AsyncEngine created in function scope, close and
     # clean-up pooled connections

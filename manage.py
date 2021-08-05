@@ -1,9 +1,9 @@
-import asyncio
-import sys
+# import asyncio
 import subprocess
+import sys
 
-from aiohttp import web
 import click
+from aiohttp import web
 
 from routes import routes
 
@@ -15,7 +15,7 @@ def cli():
 
 @cli.command()
 def run():
-    click.echo('run run run!')
+    click.echo("run run run!")
     app = web.Application()
     for route in routes:
         app.router.add_route(route[0], route[1], route[2], name=route[3])
@@ -24,17 +24,17 @@ def run():
 
 
 @cli.command()
-@click.option('--coverage', is_flag=True)
+@click.option("--coverage", is_flag=True)
 def test(coverage):
     # if not settings.TESTING_MODE:
     #     raise ValueError('...')
-    args = ['pytest', 'tests']
+    args = ["pytest", "tests"]
     if coverage:
-        args.append('--cov=src')
+        args.append("--cov=src")
     completed_process = subprocess.run(args)
     sys.exit(completed_process.returncode)
-    click.echo('testing app!')
+    click.echo("testing app!")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     cli()
