@@ -3,3 +3,7 @@ sudo docker run --rm --name pg-docker -e POSTGRES_PASSWORD=postgres -d -p 5432:5
 
 $ alembic revision --autogenerate -m "Added required tables"
 $ alembic upgrade head
+
+тест
+pre-commit run --all-files
+python manage.py test --coverage
