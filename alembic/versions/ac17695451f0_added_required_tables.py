@@ -1,7 +1,7 @@
 """Added required tables
 
 Revision ID: ac17695451f0
-Revises: 
+Revises:
 Create Date: 2021-07-25 11:32:14.248664
 
 """

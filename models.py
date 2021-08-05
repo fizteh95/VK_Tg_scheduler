@@ -45,3 +45,10 @@ class B(Base):
     __tablename__ = "b"
     id = Column(Integer, primary_key=True)
     data = Column(String)
+
+
+# class UserBot(Base):
+#     __tablename__ = "bot_group_record"
+#     id = Column(Integer, primary_key=True)
+#     username = Column(String)
+#     group = Column(String)
