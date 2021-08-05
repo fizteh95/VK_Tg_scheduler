@@ -6,11 +6,20 @@ import click
 from aiohttp import web
 
 from routes import routes
+from src.database import engine
 
 
 @click.group()
 def cli():
     pass
+
+
+async def startup_tasks(app):
+    app["engine"] = engine
+
+
+async def cleanup_tasks(app):
+    await app["engine"].dispose()
 
 
 @cli.command()
@@ -20,6 +29,8 @@ def run():
     for route in routes:
         app.router.add_route(route[0], route[1], route[2], name=route[3])
     # asyncio.ensure_future(test())
+    app.on_startup.append(startup_tasks)
+    app.on_cleanup.append(cleanup_tasks)
     web.run_app(app, port=8080)
 
 

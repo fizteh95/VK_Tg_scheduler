@@ -1,51 +1,30 @@
-# from sqlalchemy import ForeignKey
-from sqlalchemy import Column, DateTime, Integer, String, func
-from sqlalchemy.orm import declarative_base
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, func
+from sqlalchemy.orm import declarative_base, relationship
 
-# from sqlalchemy.orm import relationship
 # from sqlalchemy.orm import selectinload
 
 
 Base = declarative_base()
 
-#
-# class A(Base):
-#     __tablename__ = "a"
-#
-#     id = Column(Integer, primary_key=True)
-#     data = Column(String)
-#     create_date = Column(DateTime, server_default=func.now())
-#     bs = relationship("B")
-#
-#     # required in order to access columns with server defaults
-#     # or SQL expression defaults, subsequent to a flush, without
-#     # triggering an expired load
-#     __mapper_args__ = {"eager_defaults": True}
-#
-#
-# class B(Base):
-#     __tablename__ = "b"
-#     id = Column(Integer, primary_key=True)
-#     a_id = Column(ForeignKey("a.id"))
-#     data = Column(String)
 
-
-class A(Base):
-    __tablename__ = "a"
-    id = Column(Integer, primary_key=True)
-    data = Column(String)
-    data2 = Column(String, server_default="Smth")
+class Connections(Base):
+    __tablename__ = "connection"
+    user_id = Column(ForeignKey("user.id"), primary_key=True)
+    group_id = Column(ForeignKey("vk_group.id"), primary_key=True)
     create_date = Column(DateTime, server_default=func.now())
+    group = relationship("VkGroup", back_populates="user")
+    user = relationship("User", back_populates="vk_group")
 
 
-class B(Base):
-    __tablename__ = "b"
+class User(Base):
+    __tablename__ = "user"
     id = Column(Integer, primary_key=True)
-    data = Column(String)
+    user = Column(String)
+    groups = relationship("Connection", back_populates="user")
 
 
-# class UserBot(Base):
-#     __tablename__ = "bot_group_record"
-#     id = Column(Integer, primary_key=True)
-#     username = Column(String)
-#     group = Column(String)
+class VkGgroup(Base):
+    __tablename__ = "vk_group"
+    id = Column(Integer, primary_key=True)
+    vk_url = Column(String)
+    users = relationship("Connection", back_populates="group")
