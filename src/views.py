@@ -15,6 +15,7 @@ class AddUser(web.View):
         async with async_session() as session:
             data = await self.request.json()
             print(data)
+            # тест
             username = data["username"]
             new_user = User(user=username, groups=None)
             session.add(new_user)
