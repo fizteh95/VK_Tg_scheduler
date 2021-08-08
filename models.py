@@ -7,24 +7,36 @@ from sqlalchemy.orm import declarative_base, relationship
 Base = declarative_base()
 
 
-class Connections(Base):
+class Connection(Base):
     __tablename__ = "connection"
-    user_id = Column(ForeignKey("user.id"), primary_key=True)
-    group_id = Column(ForeignKey("vk_group.id"), primary_key=True)
+    id = Column(Integer, primary_key=True)
+    # user_id = Column(ForeignKey("user.id"), primary_key=True)
+    # group_id = Column(ForeignKey("vk_group.id"), primary_key=True)
     create_date = Column(DateTime, server_default=func.now())
-    group = relationship("VkGroup", back_populates="user")
-    user = relationship("User", back_populates="vk_group")
+    # group = relationship("VkGroup", secondary="connection_group")
+    user = relationship("User", back_populates="connection", uselist=False)
+    group = relationship("Group", back_populates="connection", uselist=False)
+
+    # __mapper_args__ = {"eager_defaults": True}
 
 
 class User(Base):
     __tablename__ = "user"
     id = Column(Integer, primary_key=True)
     user = Column(String)
-    groups = relationship("Connection", back_populates="user")
+    # connection = Column(ForeignKey("connection.id"))
+    # groups = relationship("Connection", back_populates="user")
+    connection_id = Column(Integer, ForeignKey("connection.id"))
+
+    # many-to-one side remains, see tip below
+    connection = relationship("Connection", back_populates="user")
 
 
-class VkGgroup(Base):
-    __tablename__ = "vk_group"
+class Group(Base):
+    __tablename__ = "group"
     id = Column(Integer, primary_key=True)
     vk_url = Column(String)
-    users = relationship("Connection", back_populates="group")
+    connection_id = Column(Integer, ForeignKey("connection.id"))
+
+    # many-to-one side remains, see tip below
+    connection = relationship("Connection", back_populates="group")
