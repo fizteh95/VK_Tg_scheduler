@@ -18,11 +18,11 @@ repos:
     hooks:
     -   id: flake8
         exclude: ^venv/|^alembic/
--   repo: https://github.com/PyCQA/isort
-    rev: 5.4.2
-    hooks:
-    -   id: isort
-        exclude: ^venv/|^alembic/
+#-   repo: https://github.com/PyCQA/isort
+#    rev: 5.4.2
+#    hooks:
+#    -   id: isort
+#        exclude: ^venv/|^alembic/
 -   repo: local
     hooks:
     -   id: pytest-check
