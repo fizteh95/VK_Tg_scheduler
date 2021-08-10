@@ -19,10 +19,6 @@ class AddUser(web.View):
             new_user = User(user=username)
             session.add(new_user)
             await session.commit()
-            chpok = await session.execute(select(User).order_by(User.id).limit(10))
-            result = chpok.scalars().all()
-            for r in result:
-                print(r.user)
         return web.json_response({"result": True})
 
 
@@ -33,9 +29,22 @@ class AllUsers(web.View):
             result = chpok.scalars().all()
             response = []
             for r in result:
-                print(r.user)
-            for r in result:
                 response.append(r.user)
+        return web.json_response(response)
+
+
+class UserGroups(web.View):
+    async def post(self):
+        async with async_session() as session:
+            data = await self.request.json()
+            username = data["username"]
+            chpok = await session.execute(
+                select(User).where(User.user == username).limit(1)
+            )
+            result = chpok.scalars().all()[0]
+            response = []
+            for c in result.connection_u:
+                response.append(c.group.vk_url)
         return web.json_response(response)
 
 
@@ -47,10 +56,6 @@ class AddGroup(web.View):
             new_group = Group(vk_url=vk_url)
             session.add(new_group)
             await session.commit()
-            chpok = await session.execute(select(Group).order_by(Group.id).limit(10))
-            result = chpok.scalars().all()
-            for r in result:
-                print(r.vk_url)
         return web.json_response({"result": True})
 
 
@@ -60,8 +65,6 @@ class AllGroups(web.View):
             chpok = await session.execute(select(Group).order_by(Group.id).limit(10))
             result = chpok.scalars().all()
             response = []
-            for r in result:
-                print(r.vk_url)
             for r in result:
                 response.append(r.vk_url)
         return web.json_response(response)
@@ -83,15 +86,9 @@ class AddConnection(web.View):
             )
             group = group.scalars().all()[0]
 
-            conn = Connection(user=user, group=group)
+            conn = Connection(user_id=user.id, group_id=group.id)
             session.add(conn)
             await session.commit()
-            chpok = await session.execute(
-                select(Connection).order_by(Connection.id).limit(10)
-            )
-            result = chpok.scalars().all()
-            for r in result:
-                print(r.user.user, r.group.vk_url)
         return web.json_response({"result": True})
 
 
@@ -105,8 +102,5 @@ class AllConnections(web.View):
             result = chpok.scalars().all()
             response = []
             for r in result:
-                print(r.user, r.group)
-            for r in result:
-                # print(r.user.user, r.group.vk_url)
                 response.append([r.user.user, r.group.vk_url])
         return web.json_response(response)

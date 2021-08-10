@@ -6,6 +6,7 @@ from src.views import (
     AllGroups,
     AllUsers,
     Test,
+    UserGroups,
 )
 
 routes = [
@@ -16,4 +17,5 @@ routes = [
     ("GET", "/all_connections", AllConnections, "all_connections"),
     ("GET", "/all_users", AllUsers, "all_users"),
     ("GET", "/all_groups", AllGroups, "all_groups"),
+    ("POST", "/user_groups", UserGroups, "user_groups"),
 ]
