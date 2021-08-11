@@ -1,22 +1,22 @@
-# import aiohttp
-
 from src.utilities import mult_two_numbers
 
-# from src.views import Test
-# from aiohttp import web
-# from aiohttp.test_utils import make_mocked_request
-# import pytest
+import pytest
+
+
+from src.server import Server
+
+
+@pytest.fixture
+def cli(loop, aiohttp_client):
+    app = Server(test=True).app
+    return loop.run_until_complete(aiohttp_client(app))
+
+
+async def test_all_user(cli):
+    resp = await cli.get("/all_users")
+    assert resp.status == 200
 
 
 def test_mult_two_numbers():
     result = mult_two_numbers(2, 3)
     assert result == 6
-
-
-# @pytest.mark.asyncio
-# async def test_test_view():
-#     request = make_mocked_request('GET', '/test', headers={'token': 'x'})
-#     view = Test(request)
-#     response = await view.get()
-#     print(response.status)
-#     assert response == web.json_response({'testing': 'ok'})

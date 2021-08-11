@@ -2,7 +2,10 @@ from aiohttp import web
 from sqlalchemy.future import select
 
 from models import Connection, Group, User
-from src.database import async_session
+from src.database import DB
+
+
+async_session = DB.async_session
 
 
 class Test(web.View):
