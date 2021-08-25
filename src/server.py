@@ -33,4 +33,5 @@ class Server:
         return self._app
 
     def run(self, host, port):
+        print("start!")
         web.run_app(self.app, host=host, port=port)
