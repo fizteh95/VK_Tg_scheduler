@@ -4,7 +4,6 @@ from sqlalchemy.future import select
 from models import Connection, Group, User
 from src.database import DB
 
-
 async_session = DB.async_session
 
 

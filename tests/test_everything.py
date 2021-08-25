@@ -1,9 +1,7 @@
-from src.utilities import mult_two_numbers
-
 import pytest
 
-
 from src.server import Server
+from src.utilities import mult_two_numbers
 
 
 @pytest.fixture

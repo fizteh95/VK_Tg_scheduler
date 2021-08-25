@@ -5,9 +5,9 @@ from src.views import (
     AllConnections,
     AllGroups,
     AllUsers,
+    Healthcheck,
     Test,
     UserGroups,
-    Healthcheck,
 )
 
 routes = [
