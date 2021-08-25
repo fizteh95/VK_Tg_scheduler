@@ -24,9 +24,9 @@ repos:
     hooks:
     -   id: isort
         exclude: ^venv/|^alembic/
--   repo: local
-    hooks:
-    -   id: pytest-check
-        name: pytest-check
-        entry: bash -c 'pytest'
-        language: system
+#-   repo: local
+#    hooks:
+#    -   id: pytest-check
+#        name: pytest-check
+#        entry: bash -c 'pytest'
+#        language: system
