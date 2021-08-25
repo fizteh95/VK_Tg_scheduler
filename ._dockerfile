@@ -1,0 +1,33 @@
+FROM python:3.7.6-slim-buster
+
+ENV TZ=Asia/Yekaterinburg
+ENV DEBIAN_FRONTEND=noninteractive
+
+ARG UID=1001
+ARG GID=1001
+ARG USER=botuser
+ARG GROUP=botgroup
+
+COPY requirements.txt .
+
+RUN set -x \
+    && ln -fs /usr/share/zoneinfo/Asia/Yekaterinburg /etc/localtime \
+    && apt-get update \
+    && apt-get --yes install libpq5 libpq-dev gcc \
+    && pip install -r requirements.txt --no-cache-dir \
+    && apt-get --yes purge gcc libpq-dev \
+    && apt-get --yes autoremove \
+    && apt-get --yes clean \
+    && groupadd -g ${GID} ${GROUP} \
+    && useradd -u ${UID} -g ${GROUP} ${USER}
+
+WORKDIR /opt/telegram-bot
+COPY . .
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chown -R ${USER}:${GROUP} . \
+    && chmod +x /usr/local/bin/docker-entrypoint.sh
+
+USER ${USER}
+
+HEALTHCHECK --interval=5s --timeout=5s --retries=5 --start-period=5s CMD curl -f 0.0.0.0:8080/healthcheck || exit 1
+ENTRYPOINT ["docker-entrypoint.sh"]

@@ -14,6 +14,11 @@ class Test(web.View):
         return web.json_response({"testing": "ok"})
 
 
+class Healthcheck(web.View):
+    async def get(self):
+        return web.json_response({"testing": "ok"})
+
+
 class AddUser(web.View):
     async def post(self):
         async with async_session() as session:

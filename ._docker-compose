@@ -1,0 +1,46 @@
+version: "3.5"
+services:
+
+  telegram-bot:
+    image: anonymous-correspondence:slim
+    networks:
+      - telegram
+    environment:
+      BOT_TOKEN: "1002230308:AAHNEjN8wR_bJpBQ4pvwgM9f68qDn7qaQaw"
+      BOT_USER_NAME: "Claimant_test_bot"
+      ADMIN: "rpm005"
+      DATABASE_URL: "postgresql://telebot:telebot@db/telebot"
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: always
+    links:
+      - telegram-db:db
+
+  telegram-db:
+    image: postgres:11
+    volumes:
+      - type: volume
+        source: db-data
+        target: /var/lib/postgresql/data
+        consistency: consistent
+    environment:
+      POSTGRES_PASSWORD: telebot
+      POSTGRES_USER: telebot
+      POSTGRES_DB: telebot
+    networks:
+      - telegram
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: always
+
+networks:
+  telegram:
+    ipam:
+      driver: default
+      config:
+        - subnet: "10.1.1.0/24"
+
+volumes:
+  db-data:
