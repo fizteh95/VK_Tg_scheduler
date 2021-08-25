@@ -18,3 +18,4 @@ async def test_all_user(cli):
 def test_mult_two_numbers():
     result = mult_two_numbers(2, 3)
     assert result == 6
+    assert 3 == 3
